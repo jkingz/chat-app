@@ -9,6 +9,8 @@ const Chat = ({ location }) => {
 
     const [name, setName] = useState('');
     const [room, setRoom] = useState('');
+    const [message, setMessage] = useState('');
+    const [messages, setMessages] = useState([]);
 
     const ENDPOINT = 'localhost:5000';
 
@@ -29,7 +31,14 @@ const Chat = ({ location }) => {
             socket.off();
         }
         
-    }, [ENDPOINT, location.search])
+    }, [ENDPOINT, location.search]);
+
+    // handling messages HOOK effects
+    useEffect(() => {
+        socket.on('message', (message) => {
+            setMessages([...messages, message]);
+        });
+    },[]);
 
     return (
         <h1>CHAT</h1>
