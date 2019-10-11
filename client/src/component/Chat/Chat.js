@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import queryString from 'query-string';
 import io from 'socket.io-client';
 
+import './Chat.css';
+
 let socket;
 
 
@@ -38,10 +40,26 @@ const Chat = ({ location }) => {
         socket.on('message', (message) => {
             setMessages([...messages, message]);
         });
-    },[]);
+    }, [messages]);
+
+    // function for handling send messages
+    const sendMessage = (e) => {
+        e.preventDefault();
+        if(message) {
+            socket.emit('sendMessage', message, () => setMessage=(''));
+        };
+    };
 
     return (
-        <h1>CHAT</h1>
+        <div className="outerContainer">
+            <div className="container">
+                <input 
+                    value={message} 
+                    onChange={(e) => setMessage(e.target.value)}
+                    onKeyPress={e => e.key === 'Enter' ? sendMessage(e) : null}
+                />
+            </div>
+        </div>
     );
 }
 
